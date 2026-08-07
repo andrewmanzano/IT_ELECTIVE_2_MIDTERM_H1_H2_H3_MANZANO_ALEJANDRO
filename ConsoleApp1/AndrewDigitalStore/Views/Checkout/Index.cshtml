@@ -1,0 +1,73 @@
+﻿@model AndrewDigitalStore.Models.DTOs.CheckoutFormDTO
+@using AndrewDigitalStore.Models.Entities
+
+@{
+    ViewData["Title"] = "Checkout";
+    ShoppingCart cart = ViewBag.Cart;
+}
+
+<h2 class="text-warning mb-4">Complete Transaction</h2>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card bg-dark border-secondary text-light">
+            <div class="card-header bg-secondary fw-bold text-warning">Order Summary</div>
+            <div class="card-body">
+                @if (cart != null && cart.Items.Any())
+                {
+                    <ul class="list-group list-group-flush mb-3">
+                        @foreach (var item in cart.Items)
+                        {
+                            <li class="list-group-item bg-dark text-light border-secondary d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div>@item.ProductName</div>
+                                    <small class="text-muted">@item.Quantity x $@item.UnitPrice.ToString("F2")</small>
+                                </div>
+                                <span class="fw-bold">$@item.TotalPrice.ToString("F2")</span>
+                            </li>
+                        }
+                    </ul>
+                    <div class="d-flex justify-content-between fs-5 fw-bold text-warning border-top border-secondary pt-2">
+                        <span>Total:</span>
+                        <span>$@cart.GrandTotal.ToString("F2")</span>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No items in cart to process.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card bg-dark border-secondary text-light">
+            <div class="card-header bg-secondary fw-bold text-warning">Customer Information</div>
+            <div class="card-body">
+                <form asp-controller="Checkout" asp-action="Process" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="CustomerName" class="form-label">Customer Name *</label>
+                        <input asp-for="CustomerName" class="form-control bg-dark text-light border-secondary" placeholder="e.g. Jane Doe" />
+                        <span asp-validation-for="CustomerName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CustomerEmail" class="form-label">Customer Email (Optional)</label>
+                        <input asp-for="CustomerEmail" class="form-control bg-dark text-light border-secondary" placeholder="jane@example.com" />
+                        <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg w-100 fw-bold mt-3" @(cart != null && cart.Items.Any() ? "" : "disabled")>
+                        Confirm Sale ($@(cart?.GrandTotal.ToString("F2") ?? "0.00"))
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
