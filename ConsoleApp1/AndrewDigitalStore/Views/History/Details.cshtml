@@ -1,0 +1,55 @@
+﻿@model AndrewDigitalStore.Models.Entities.Transaction
+
+@{
+    ViewData["Title"] = "Transaction Details";
+}
+
+<div class="card bg-dark border-warning text-light mx-auto" style="max-width: 650px;">
+    <div class="card-header bg-secondary border-warning text-center">
+        <h3 class="text-warning mb-0">RECEIPT DETAILS</h3>
+        <small class="text-muted">ID: @Model.TransactionId</small>
+    </div>
+    <div class="card-body">
+        <p><strong>Date:</strong> @Model.Date.ToString("f")</p>
+        <p><strong>Customer:</strong> @Model.CustomerName</p>
+        @if (!string.IsNullOrEmpty(Model.CustomerEmail))
+        {
+            <p><strong>Email:</strong> @Model.CustomerEmail</p>
+        }
+
+        <hr class="border-secondary" />
+
+        <h5>Purchased Items</h5>
+        <table class="table table-dark border-secondary">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.PurchasedItems)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Quantity</td>
+                        <td>$@item.UnitPrice.ToString("F2")</td>
+                        <td>$@item.TotalPrice.ToString("F2")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">Grand Total:</td>
+                    <td class="fw-bold text-warning fs-5">$@Model.TotalAmount.ToString("F2")</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="card-footer bg-dark border-secondary text-center">
+        <a asp-action="Index" class="btn btn-outline-warning">Back to Ledger</a>
+        <a asp-controller="Shop" asp-action="Index" class="btn btn-success">New Sale</a>
+    </div>
+</div>

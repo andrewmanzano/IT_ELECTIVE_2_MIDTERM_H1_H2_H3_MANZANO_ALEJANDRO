@@ -56,4 +56,11 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /.idea/
+<<<<<<< Updated upstream
+=======
 /.vs
+<<<<<<< HEAD
+/ConsoleApp1/.vs/ConsoleApp1
+=======
+>>>>>>> Checkout
+>>>>>>> Stashed changes
